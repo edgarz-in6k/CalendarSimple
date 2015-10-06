@@ -4,20 +4,21 @@ import static java.lang.System.out;
 
 public class MyCalendar {
 
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_BLACK = "\u001B[30m";
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_GREEN = "\u001B[32m";
-    public static final String ANSI_YELLOW = "\u001B[33m";
-    public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_PURPLE = "\u001B[35m";
-    public static final String ANSI_CYAN = "\u001B[36m";
-    public static final String ANSI_WHITE = "\u001B[37m";
+    private static final String ANSI_RESET = "\u001B[0m";
+    private static final String ANSI_BLACK = "\u001B[30m";
+    private static final String ANSI_RED = "\u001B[31m";
+    private static final String ANSI_GREEN = "\u001B[32m";
+    private static final String ANSI_YELLOW = "\u001B[33m";
+    private static final String ANSI_BLUE = "\u001B[34m";
+    private static final String ANSI_PURPLE = "\u001B[35m";
+    private static final String ANSI_CYAN = "\u001B[36m";
+    private static final String ANSI_WHITE = "\u001B[37m";
 
     private static final String colorWeekday = ANSI_GREEN;
     private static final String colorHoliday = ANSI_RED;
     private static final String colorOther = ANSI_WHITE;
     private static final String colorToday = ANSI_BLUE;
+    private static final String colorReset = ANSI_RESET;
 
     private static final int DAY_OF_WEEK_SIZE = 7;
     private static final int WEEK_OF_MASS_SIZE = 6;
@@ -31,14 +32,43 @@ public class MyCalendar {
     private int holiday2;
     private String headString;
 
+    private Calendar calendar;
+    private Style style;
+
     public enum Style{
         STANDARD, AMERICAN
     }
 
     public MyCalendar(Style style) {
-        out.println("October, 2015 year");
+        initCalendar();
+        setStyle(style);
+        makeBuild();
+    }
 
-        Calendar calendar = (Calendar)Calendar.getInstance().clone();
+    public Style getStyle() {
+        return style;
+    }
+
+    public void setStyle(Style style) {
+        this.style = style;
+        calendar.set(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
+        if (style == Style.STANDARD){
+            startIdxThisMonth = calendar.get(Calendar.DAY_OF_WEEK);
+            holiday1 = 5;
+            holiday2 = 6;
+            headString = " " + colorWeekday + "Mon  Thu  Wed  Tue  Fri  " + colorHoliday + "Sat  Sun" + colorReset;
+        }
+        else{
+            startIdxThisMonth = calendar.get(Calendar.DAY_OF_WEEK) + 1;
+            holiday1 = 0;
+            holiday2 = 0;
+            headString = " " + colorHoliday + "Sun  " + colorWeekday + "Mon  Thu  Wed  Tue  Fri  Sat" + colorReset;
+        }
+        makeBuild();
+    }
+
+    private void initCalendar(){
+        calendar = (Calendar)Calendar.getInstance().clone();
         calendar.set(Calendar.YEAR, Calendar.MONTH, Calendar.DAY_OF_MONTH);
 
         amountDayInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
@@ -47,23 +77,6 @@ public class MyCalendar {
 
         calendar.add(Calendar.MONTH, 1);
         amountDayInMonthPrev = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-        //out.println(amountDayInMonthPrev);
-
-        calendar.set(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
-        if (style == Style.STANDARD){
-            startIdxThisMonth = calendar.get(Calendar.DAY_OF_WEEK);
-            holiday1 = 5;
-            holiday2 = 6;
-            headString = " " + colorWeekday + "Mon  Thu  Wed  Tue  Fri  " + colorHoliday + "Sat  Sun" + ANSI_RESET;
-        }
-        else{
-            startIdxThisMonth = calendar.get(Calendar.DAY_OF_WEEK) + 1;
-            holiday1 = 0;
-            holiday2 = 0;
-            headString = " " + colorHoliday + "Sun  " + colorWeekday + "Mon  Thu  Wed  Tue  Fri  Sat" + ANSI_RESET;
-        }
-
-        makeBuild();
     }
 
     private void makeBuild(){
@@ -89,41 +102,52 @@ public class MyCalendar {
     }
 
     public void print(){
-        out.println(headString);
+        System.out.print(this);
+    }
+
+    public void println(){
+        System.out.println(this);
+    }
+
+    @Override
+    public String toString(){
+        String s = "";
+        s += headString + "\n";
         int flagColorMonth = 0;// 0 1 2
-        out.print(colorOther);
+        s += colorOther;
         for (int i=0; i< WEEK_OF_MASS_SIZE; i++){
             for (int j=0; j< DAY_OF_WEEK_SIZE; j++){
                 if (day[i][j]==1){
                     flagColorMonth++;
                     if (flagColorMonth==1)
-                        out.print(colorWeekday);
+                        s += colorWeekday;
                     else if (flagColorMonth==2)
-                        out.print(colorOther);
+                        s += colorOther;
                 }
 
                 if (j==holiday1 || j==holiday2){
                     if (flagColorMonth==0 || flagColorMonth==2){
-                        out.format("%4d ", day[i][j]);
+                        s += String.format("%4d ", day[i][j]);
                     }
                     else{
-                        out.print(colorHoliday);
-                        out.format("%4d ", day[i][j]);
-                        out.print(colorWeekday);
+                        s += colorHoliday;
+                        s += String.format("%4d ", day[i][j]);
+                        s += colorWeekday;
                     }
 
                 }
                 else if (day[i][j]==today && flagColorMonth==1){
-                    out.print(colorToday);
-                    out.format("%4d ", day[i][j]);
-                    out.print(colorWeekday);
+                    s += colorToday;
+                    s += String.format("%4d ", day[i][j]);
+                    s += colorWeekday;
                 }
                 else
-                    out.format("%4d ", day[i][j]);
+                    s += String.format("%4d ", day[i][j]);
             }
-            out.println();
+            s += "\n";
         }
-        out.print(ANSI_RESET);
+        s += colorReset;
+        return s;
     }
 
 }
