@@ -5,6 +5,24 @@ import java.util.Date;
 
 public class MyCalendar {
 
+    private static final String COLOR_WEEKDAY = ColorCalendar.ANSI_GREEN.color;
+    private static final String COLOR_HOLIDAY = ColorCalendar.ANSI_RED.color;
+    private static final String COLOR_OTHER = ColorCalendar.ANSI_WHITE.color;
+    private static final String COLOR_TODAY = ColorCalendar.ANSI_BACKGROUND.color;
+    private static final String COLOR_RESET = ColorCalendar.ANSI_RESET.color;
+
+    private static final int WEEK_SIZE = 7;
+    private static final int WEEKS_COUNT = 6;
+    private static final int[][] monthCalendar = new int[WEEKS_COUNT][WEEK_SIZE];
+
+    private int amountOfDaysInMonth;
+    private int amountOfDaysInMonthPrev;
+    private int today;
+    private int firstDayOfMonthIndex;
+
+    private Calendar calendar = Calendar.getInstance();
+    private Style style;
+
     enum ColorCalendar{
         ANSI_RESET("\u001B[0m"),
         ANSI_BLACK("\u001B[30m"),
@@ -14,7 +32,8 @@ public class MyCalendar {
         ANSI_BLUE("\u001B[34m"),
         ANSI_PURPLE("\u001B[35m"),
         ANSI_CYAN("\u001B[36m"),
-        ANSI_WHITE("\u001B[37m");
+        ANSI_WHITE("\u001B[37m"),
+        ANSI_BACKGROUND("\u001b[44m");
 
         String color;
 
@@ -22,29 +41,6 @@ public class MyCalendar {
             this.color = color;
         }
     }
-
-    private static final String COLOR_WEEKDAY = ColorCalendar.ANSI_GREEN.color;
-    private static final String COLOR_HOLIDAY = ColorCalendar.ANSI_RED.color;
-    private static final String COLOR_OTHER = ColorCalendar.ANSI_WHITE.color;
-    private static final String COLOR_TODAY = ColorCalendar.ANSI_BLUE.color;
-    private static final String COLOR_RESET = ColorCalendar.ANSI_RESET.color;
-
-    private static final int WEEK_SIZE = 7;
-    private static final int WEEKS_COUNT = 6;
-    private static final int[][] monthCalendar = new int[WEEKS_COUNT][WEEK_SIZE];
-    //private static final int OFFSET_FOR_AMERICAN = 1;
-
-    private int amountOfDaysInMonth;
-    private int amountOfDaysInMonthPrev;
-    private int today;
-    private int firstDayOfMonthIndex;
-
-    /*private int firstHolidayIndex;
-    private int secondHolidayIndex;
-    private String header;*/
-
-    private Calendar calendar = Calendar.getInstance();
-    private Style style;
 
     public enum Style{
         STANDARD(
@@ -74,9 +70,9 @@ public class MyCalendar {
     }
 
     public MyCalendar(Style style) {
-        firstDayOfMonthIndex = calendar.get(Calendar.DAY_OF_WEEK) - 1 + style.offsetForAmerican;
+        this.style = style;
         initDate();
-        setStyle(style);
+        buildCalendar();
     }
 
     public Style getStyle() {
@@ -88,7 +84,17 @@ public class MyCalendar {
         buildCalendar();
     }
 
+    void nextMonth(){
+
+    }
+
+    void prevMonth(){
+
+    }
+
     private void initDate(){
+        firstDayOfMonthIndex = calendar.get(Calendar.DAY_OF_WEEK) - 1 + style.offsetForAmerican;
+
         amountOfDaysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
         DateFormat dateFormat = new SimpleDateFormat("dd");
@@ -168,15 +174,3 @@ public class MyCalendar {
     }
 
 }
-
-/*
-public enum Week{
-        MONDAY(0), TUESDAY(1), WEDNESDAY(2), THURSDAY(3), FRIDAY(4), SATURDAY(5), SUNDAY(6);
-
-        int value;
-
-        Week(int value) {
-            this.value = value;
-        }
-    }
-*/

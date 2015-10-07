@@ -1,7 +1,7 @@
 public class CalendarSimple {
     public static void main(String[] args) {
 
-        MyCalendar al = new MyCalendar(MyCalendar.Style.AMERICAN);
+        MyCalendar al = new MyCalendar(MyCalendar.Style.STANDARD);
         al.println();
 
         //al.setStyle(MyCalendar.Style.STANDARD);
