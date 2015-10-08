@@ -10,6 +10,7 @@ public class MyCalendar {
     private static final String COLOR_TODAY = ColorCalendar.ANSI_BACKGROUND.color;
     private static final String COLOR_RESET = ColorCalendar.ANSI_RESET.color;
 
+    private int OFFSET_FOR_TRANSFORM_IN_INDEX = 1;
     private static final int WEEKS_COUNT = 6;
     private static final int WEEK_SIZE = 7;
     private static final int[][] monthCalendar = new int[WEEKS_COUNT][WEEK_SIZE];
@@ -20,7 +21,7 @@ public class MyCalendar {
     private int firstDayOfMonthIndex;
 
     private Calendar calendar = Calendar.getInstance();
-    private int numberMonthRelativeCurrent = 0;
+    private int numberMonthRelativeThis = 0;
     private Style style;
 
     enum ColorCalendar{
@@ -45,14 +46,14 @@ public class MyCalendar {
     public enum Style{
         STANDARD(
                 0,
-                5,
-                6,
+                Day.SATURDAY.value,
+                Day.SUNDAY.value,
                 " " + COLOR_WEEKDAY + "Mon  Thu  Wed  Tue  Fri  " + COLOR_HOLIDAY + "Sat  Sun" + COLOR_RESET
         ),
         AMERICAN(
                 1,
-                0,
-                0,
+                Day.MONDAY.value,
+                Day.MONDAY.value,
                 " " + COLOR_HOLIDAY + "Sun  " + COLOR_WEEKDAY + "Mon  Thu  Wed  Tue  Fri  Sat" + COLOR_RESET
         );
 
@@ -66,6 +67,14 @@ public class MyCalendar {
             this.firstHolidayIndex = firstHolidayIndex;
             this.secondHolidayIndex = secondHolidayIndex;
             this.header = header;
+        }
+    }
+
+    enum Day{
+        MONDAY(0), TUESDAY(1), WEDNESDAY(2), THURSDAY(3), FRIDAY(4), SATURDAY(5), SUNDAY(6);
+        private int value;
+        Day(int value) {
+            this.value = value;
         }
     }
 
@@ -85,19 +94,25 @@ public class MyCalendar {
     }
 
     public void nextMonth(){
-        calendar.add(Calendar.MONTH,1);
-        numberMonthRelativeCurrent++;
-
+        addMonth();
         init();
         buildCalendar();
     }
 
-    public void prevMonth(){
-        calendar.add(Calendar.MONTH,-1);
-        numberMonthRelativeCurrent++;
+    private void addMonth(){
+        calendar.add(Calendar.MONTH,1);
+        numberMonthRelativeThis++;
+    }
 
+    public void prevMonth(){
+        subMonth();
         init();
         buildCalendar();
+    }
+
+    private void subMonth(){
+        calendar.add(Calendar.MONTH,-1);
+        numberMonthRelativeThis--;
     }
 
     private void init(){
@@ -110,9 +125,9 @@ public class MyCalendar {
         dateFormat = new SimpleDateFormat("dd");
         today = Integer.parseInt(dateFormat.format(calendar.getTime()));
 
-        calendar.add(Calendar.MONTH, 1);
-        amountOfDaysInMonthPrev = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         calendar.add(Calendar.MONTH, -1);
+        amountOfDaysInMonthPrev = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        calendar.add(Calendar.MONTH, 1);
     }
 
     private void buildCalendar(){
@@ -148,7 +163,7 @@ public class MyCalendar {
         System.out.println(this);
     }
 
-    public void printlnSimple(){
+    public void simplePrintlnASCI(){
         for (int i=0; i< WEEKS_COUNT; i++){
             for (int j=0; j< WEEK_SIZE; j++){
                 System.out.printf("%4d", monthCalendar[i][j]);
@@ -159,10 +174,10 @@ public class MyCalendar {
 
     @Override
     public String toString(){
-        return headerCalendar() + beginCalendar() + baseCalendar() + endCalendar();
+        return headerCalendarASCI() + beginCalendarASCI() + baseCalendarASCI() + endCalendarASCI();
     }
 
-    private String headerCalendar(){
+    private String headerCalendarASCI(){
         String s = "";
         DateFormat dateFormat = new SimpleDateFormat("MMMM, Y");
         s += dateFormat.format(calendar.getTime()) + "\n";
@@ -171,7 +186,7 @@ public class MyCalendar {
         return s;
     }
 
-    private String beginCalendar(){
+    private String beginCalendarASCI(){
         String s = COLOR_OTHER;
         for (int j=0; j<firstDayOfMonthIndex; j++)
             s += String.format("%4d ", monthCalendar[0][j]);
@@ -179,31 +194,22 @@ public class MyCalendar {
         return s;
     }
 
-    private String baseCalendar(){
+    private String baseCalendarASCI(){
         int startIndexI = 0;
         int startIndexJ = firstDayOfMonthIndex;
 
         String s = COLOR_WEEKDAY;
         for (int i=startIndexI; i< WEEKS_COUNT; i++){
             for (int j=startIndexJ; j< WEEK_SIZE; j++){
-                if (monthCalendar[i][j] == amountOfDaysInMonth && i != startIndexI){
-                    s += String.format("%4d ", monthCalendar[i][j]);
+
+                s += choiceColorForThisDay(i,j);
+                s += formattedThisDay(i, j);
+
+                if (monthCalendar[i][j] == amountOfDaysInMonth){// && i != startIndexI
                     if (j == WEEK_SIZE-1)
                         s += "\n";
                     return s;
                 }
-                if (monthCalendar[i][j] == today && numberMonthRelativeCurrent == 0){
-                    s += COLOR_TODAY;
-                    s += String.format("%4d ", monthCalendar[i][j]);
-                    s += COLOR_WEEKDAY;
-                }
-                else if (j == style.firstHolidayIndex || j == style.secondHolidayIndex){
-                    s += COLOR_HOLIDAY;
-                    s += String.format("%4d ", monthCalendar[i][j]);
-                    s += COLOR_WEEKDAY;
-                }
-                else
-                    s += String.format("%4d ", monthCalendar[i][j]);
             }
             s += "\n";
             startIndexJ = 0;
@@ -212,16 +218,29 @@ public class MyCalendar {
         return s;
     }
 
-    private String endCalendar(){
-        int lastNumberInMoth = monthCalendar[WEEKS_COUNT-1][WEEK_SIZE-1];
+    private String choiceColorForThisDay(int i, int j){
+        if (monthCalendar[i][j] == today && numberMonthRelativeThis == 0)
+            return COLOR_TODAY;
+        else if (j == style.firstHolidayIndex || j == style.secondHolidayIndex)
+            return COLOR_HOLIDAY;
+        else
+            return COLOR_WEEKDAY;
+    }
 
-        int startIndexI = WEEK_SIZE - (lastNumberInMoth / WEEK_SIZE + 1) - 1;
-        int startIndexJ = WEEK_SIZE - lastNumberInMoth % WEEK_SIZE;
+    private String formattedThisDay(int i, int j){
+        return String.format("%4d ", monthCalendar[i][j]);
+    }
+
+    private String endCalendarASCI(){
+        int lastNumberInCalendar = monthCalendar[WEEKS_COUNT-1][WEEK_SIZE-1];
+
+        int startIndexI = WEEK_SIZE - (lastNumberInCalendar / WEEK_SIZE + 1) - 1;
+        int startIndexJ = WEEK_SIZE - lastNumberInCalendar % WEEK_SIZE;
 
         String s = COLOR_OTHER;
         for (int i=startIndexI; i< WEEKS_COUNT; i++){
             for (int j=startIndexJ; j< WEEK_SIZE; j++){
-                s += String.format("%4d ", monthCalendar[i][j]);
+                s += formattedThisDay(i, j);
             }
             s += "\n";
             startIndexJ = 0;
