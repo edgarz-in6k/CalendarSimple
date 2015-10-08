@@ -163,7 +163,7 @@ public class MyCalendar {
         System.out.println(this);
     }
 
-    public void simplePrintlnASCI(){
+    public void simplePrintlnASCII(){
         for (int i=0; i< WEEKS_COUNT; i++){
             for (int j=0; j< WEEK_SIZE; j++){
                 System.out.printf("%4d", monthCalendar[i][j]);
@@ -174,10 +174,10 @@ public class MyCalendar {
 
     @Override
     public String toString(){
-        return headerCalendarASCI() + beginCalendarASCI() + baseCalendarASCI() + endCalendarASCI();
+        return headerCalendarASCII() + beginCalendarASCII() + baseCalendarASCII() + endCalendarASCII();
     }
 
-    private String headerCalendarASCI(){
+    private String headerCalendarASCII(){
         String s = "";
         DateFormat dateFormat = new SimpleDateFormat("MMMM, Y");
         s += dateFormat.format(calendar.getTime()) + "\n";
@@ -186,7 +186,7 @@ public class MyCalendar {
         return s;
     }
 
-    private String beginCalendarASCI(){
+    private String beginCalendarASCII(){
         String s = COLOR_OTHER;
         for (int j=0; j<firstDayOfMonthIndex; j++)
             s += String.format("%4d ", monthCalendar[0][j]);
@@ -194,7 +194,7 @@ public class MyCalendar {
         return s;
     }
 
-    private String baseCalendarASCI(){
+    private String baseCalendarASCII(){
         int startIndexI = 0;
         int startIndexJ = firstDayOfMonthIndex;
 
@@ -231,7 +231,7 @@ public class MyCalendar {
         return String.format("%4d ", monthCalendar[i][j]);
     }
 
-    private String endCalendarASCI(){
+    private String endCalendarASCII(){
         int lastNumberInCalendar = monthCalendar[WEEKS_COUNT-1][WEEK_SIZE-1];
 
         int startIndexI = WEEK_SIZE - (lastNumberInCalendar / WEEK_SIZE + 1) - 1;
