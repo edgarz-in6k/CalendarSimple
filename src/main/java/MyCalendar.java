@@ -93,7 +93,7 @@ public class MyCalendar {
     }
 
     private void initDate(){
-        //asdasdfs
+        //test
         firstDayOfMonthIndex = calendar.get(Calendar.DAY_OF_WEEK) - 1 + style.offsetForAmerican;
 
         amountOfDaysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
