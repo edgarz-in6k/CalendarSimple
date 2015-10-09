@@ -22,25 +22,14 @@ public class MyCalendar {
     private WeekLayout weekLayout = WeekLayout.STANDARD;
 
     public MyCalendar() {
-        this.colorSchema = ColorSchema.DARK_ASCII;
-        this.weekLayout = WeekLayout.STANDARD;
-        init();
-        buildCalendar();
+        this(WeekLayout.STANDARD);
     }
 
     public MyCalendar(WeekLayout weekLayout) {
-        this.weekLayout = weekLayout;
-        init();
-        buildCalendar();
+        this(weekLayout, ColorSchema.DARK_ASCII);
     }
 
-    public MyCalendar(ColorSchema colorSchema) {
-        this.colorSchema = colorSchema;
-        init();
-        buildCalendar();
-    }
-
-    public MyCalendar(ColorSchema colorSchema, WeekLayout weekLayout) {
+    public MyCalendar(WeekLayout weekLayout, ColorSchema colorSchema) {
         this.colorSchema = colorSchema;
         this.weekLayout = weekLayout;
         init();
