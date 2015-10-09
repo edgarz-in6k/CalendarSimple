@@ -6,8 +6,13 @@ public enum WeekLayout {
     ) {
         @Override
         public String header(ColorSchema colorSchema) {
-            return " " + colorSchema.weekday("Mon  Thu  Wed  Tue  Fri  ") +
-                    colorSchema.holiday("Sat  Sun");
+            return colorSchema.weekday(" Mon") +
+                    colorSchema.weekday("  Thu") +
+                    colorSchema.weekday("  Wed") +
+                    colorSchema.weekday("  Tue") +
+                    colorSchema.weekday("  Fri") +
+                    colorSchema.holiday("  Sat") +
+                    colorSchema.holiday("  Sun");
         }
     },
     AMERICAN(
@@ -17,14 +22,20 @@ public enum WeekLayout {
     ) {
         @Override
         public String header(ColorSchema colorSchema) {
-            return " " + colorSchema.holiday("Sun  ") +
-                    colorSchema.weekday("Mon  Thu  Wed  Tue  Fri  Sat");
+            return colorSchema.holiday("  Sun") +
+                    colorSchema.weekday(" Mon") +
+                    colorSchema.weekday("  Thu") +
+                    colorSchema.weekday("  Wed") +
+                    colorSchema.weekday("  Tue") +
+                    colorSchema.weekday("  Fri") +
+                    colorSchema.weekday("  Sat");
         }
     };
 
     private final int offset;
     private final int firstHolidayIndex;
     private final int secondHolidayIndex;
+    //private final String[] namesDayOfWeek = {" Mon",  " Thu",  " Wed",  " Tue",  " Fri",  " Sat", " Sun"};
 
     WeekLayout(int offset, int firstHolidayIndex, int secondHolidayIndex) {
         this.offset = offset;
@@ -42,6 +53,10 @@ public enum WeekLayout {
 
     public int secondHolidayIndex() {
         return secondHolidayIndex;
+    }
+
+    public boolean isHoliday(int i, int j){
+        return (j == firstHolidayIndex() || j == secondHolidayIndex());
     }
 
     //TODO get weekday names form calendar

@@ -1,15 +1,20 @@
 public enum Color{
-    RESET("\u001B[0m", "</comment>"),
-    BLACK("\u001B[30m", "<comment style=\"color: black\">"),
-    RED("\u001B[31m", "<comment style=\"color: red\">"),
-    GREEN("\u001B[32m", "<comment style=\"color: green\">"),
-    YELLOW("\u001B[33m", "<comment style=\"color: yellow\">"),
-    BLUE("\u001B[34m", "<comment style=\"color: blue\">"),
-    PURPLE("\u001B[35m", "<comment style=\"color: purple\">"),
-    CYAN("\u001B[36m", "<comment style=\"color: cyan\">"),
-    WHITE("\u001B[37m", "<comment style=\"color: white\">"),
-    BACKGROUND("\u001b[44m", "<comment style=\"color: white; background-color: blue\">"),
-    NOTHING("", "");
+    BLACK("\u001B[30m", "<td style=\"color: black\">"),
+    RED("\u001B[31m", "<td style=\"color: red\">"),
+    GREEN("\u001B[32m", "<td style=\"color: green\">"),
+    YELLOW("\u001B[33m", "<td style=\"color: yellow\">"),
+    BLUE("\u001B[34m", "<td style=\"color: blue\">"),
+    PURPLE("\u001B[35m", "<td style=\"color: purple\">"),
+    CYAN("\u001B[36m", "<td style=\"color: cyan\">"),
+    WHITE("\u001B[37m", "<td style=\"color: white\">"),
+    BACKGROUND("\u001b[44m", "<td style=\"color: white; background-color: blue\">"),
+
+    START_PARAGRAPH("", "<tr>"),
+    END_PARAGRAPH("\n", "</tr>"),
+    START_HEAD("", "<p>"),
+    END_HEAD("", "</p>"),
+
+    RESET("\u001B[0m", "</td>");
 
     String colorASCII;
     String colorHTML;

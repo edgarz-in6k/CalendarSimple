@@ -1,4 +1,3 @@
-import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -98,61 +97,15 @@ public class MyCalendar {
     public String toString() {
         String s = "";
         s += calendarHeader();
-        s += calendarPreviousMonth();
-        s += calendarCurrentMonth();
-        s += calendarNextMonth();
+        s += generateCalendar();
         return s;
     }
 
     private String calendarHeader() {
         String s = "";
         DateFormat dateFormat = new SimpleDateFormat("MMMM Y");
-        s += dateFormat.format(calendar.getTime()) + "\n";
-        s += weekLayout.header(colorSchema) + "\n";
+        s += dateFormat.format(calendar.getTime()) + colorSchema.END_PARAGRAPH;
         return s;
-    }
-
-    private String calendarPreviousMonth() {
-        int[] firstWeek = monthCalendar[0];
-        String s = "";
-        s += colorSchema.COLOR_OTHER;
-        for (int weekday = 0; firstWeek[weekday] > 1; weekday++) {
-            s += formatDay(firstWeek[weekday]);
-        }
-        s += colorSchema.COLOR_RESET;
-        return s;
-    }
-
-    private String calendarCurrentMonth() {
-        int indexFirstDayOfMonth = firstDayOfMonthIndex;
-
-        String s = "";
-        s += colorSchema.COLOR_WEEKDAY;
-        for (int i = 0; i < WEEKS_COUNT; i++) {
-            for (int j = indexFirstDayOfMonth; j < WEEK_SIZE; j++) {
-
-                s += choiceColorForThisDay(i, j);
-                s += formattedThisDay(i, j);
-                s += colorSchema.COLOR_RESET;
-
-                if (monthCalendar[i][j] == amountOfDaysInMonth) {
-                    return s;
-                }
-            }
-            s += "\n";
-            indexFirstDayOfMonth = 0;
-        }
-        return s;
-    }
-
-    private String choiceColorForThisDay(int i, int j) {
-        //System.out.println(i + " " + j);
-        if (monthCalendar[i][j] == today)
-            return colorSchema.COLOR_TODAY;
-        else if (j == weekLayout.firstHolidayIndex() || j == weekLayout.secondHolidayIndex())
-            return colorSchema.COLOR_HOLIDAY;
-        else
-            return colorSchema.COLOR_WEEKDAY;
     }
 
     private String formattedThisDay(int i, int j) {
@@ -162,25 +115,6 @@ public class MyCalendar {
 
     private String formatDay(int day) {
         return String.format("%4d ", day);
-    }
-
-    private String calendarNextMonth() {
-        int lastNumberInCalendar = monthCalendar[WEEKS_COUNT - 1][WEEK_SIZE - 1];
-
-        int startIndexI = WEEK_SIZE - (lastNumberInCalendar / WEEK_SIZE + 1) - 1;
-        int startIndexJ = WEEK_SIZE - lastNumberInCalendar % WEEK_SIZE;
-
-        String s = "";
-        s += colorSchema.COLOR_OTHER;
-        for (int i = startIndexI; i < WEEKS_COUNT; i++) {
-            for (int j = startIndexJ; j < WEEK_SIZE; j++) {
-                s += formattedThisDay(i, j);
-            }
-            s += "\n";
-            startIndexJ = 0;
-        }
-        s += colorSchema.COLOR_RESET;
-        return s;
     }
 
     public void generateHTMLFile(String path) throws IOException {
@@ -195,14 +129,49 @@ public class MyCalendar {
                 "\t</head>\n" +
                 "\t<body>\n" +
                 //"\t\t<h1>" +  + "</h1>\n" +
-                "<pre>" +
-                toString() +
-                "</pre>" +
+                generateTableForHTML() +
                 "\t</body>\n" +
                 "</html>");
         bw.close();
 
         setColorSchema(tempColorSchema);
+    }
+
+    String generateTableForHTML(){
+        String s = colorSchema.START_HEAD + calendarHeader() + colorSchema.END_HEAD;
+        s += "<table cellpadding=\"5\" border=\"1\">";
+        s += generateCalendar();
+        s += "</table>";
+        return s;
+    }
+
+    String generateCalendar(){
+        String s = "";
+        s += weekLayout.header(colorSchema) + colorSchema.END_PARAGRAPH;
+        for (int week=0; week<WEEKS_COUNT; week++){
+            s += colorSchema.START_PARAGRAPH;
+            for (int weekday=0; weekday<WEEK_SIZE; weekday++){
+                if (isDayOfOther(week, weekday))
+                    s += colorSchema.COLOR_OTHER;
+                else if (isDayOfToday(week, weekday))
+                    s += colorSchema.COLOR_TODAY;
+                else if (weekLayout.isHoliday(week,weekday))
+                    s += colorSchema.COLOR_HOLIDAY;
+                else
+                    s += colorSchema.COLOR_WEEKDAY;
+                s += formattedThisDay(week, weekday) + colorSchema.COLOR_RESET;
+            }
+            s += colorSchema.END_PARAGRAPH;
+        }
+        return s;
+    }
+
+    boolean isDayOfOther(int week, int weekday){
+        return (weekday < firstDayOfMonthIndex && week == 0) || (week >3 && monthCalendar[week][weekday]<14);
+    }
+
+    boolean isDayOfToday(int week, int weekday){
+        return today == monthCalendar[week][weekday];
     }
 
 }
