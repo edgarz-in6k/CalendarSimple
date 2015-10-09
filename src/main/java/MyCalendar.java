@@ -53,7 +53,7 @@ public class MyCalendar {
         this.colorSchema = colorSchema;
     }
 
-    private void init(){
+    private void init() {
         int dayOfWeekIndex = getDayOfWeekInNumberFormatBeginWithZero();
         firstDayOfMonthIndex = dayOfWeekIndex + weekLayout.offsetForAmerican();
 
@@ -62,7 +62,7 @@ public class MyCalendar {
         today = calendar.get(Calendar.DAY_OF_MONTH);
     }
 
-    private int getDayOfWeekInNumberFormatBeginWithZero(){
+    private int getDayOfWeekInNumberFormatBeginWithZero() {
         DateFormat dateFormat = new SimpleDateFormat("u");
         calendar.set(Calendar.DAY_OF_MONTH, 0);
         int result = Integer.parseInt(dateFormat.format(calendar.getTime()));
@@ -70,10 +70,10 @@ public class MyCalendar {
         return result;
     }
 
-    private void buildCalendar(){
+    private void buildCalendar() {
         calendar.add(Calendar.DAY_OF_MONTH, -firstDayOfMonthIndex - today);
-        for (int i=0; i<WEEKS_COUNT; i++){
-            for (int j=0; j<WEEK_SIZE; j++) {
+        for (int i = 0; i < WEEKS_COUNT; i++) {
+            for (int j = 0; j < WEEK_SIZE; j++) {
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
                 monthCalendar[i][j] = calendar.get(Calendar.DAY_OF_MONTH);
             }
@@ -81,16 +81,16 @@ public class MyCalendar {
         calendar = Calendar.getInstance();
     }
 
-    public void print(){
+    public void print() {
         System.out.print(this);
     }
 
-    public void println(){
+    public void println() {
         System.out.println(this);
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         String s = "";
         s += calendarHeader();
         s += calendarPreviousMonth();
@@ -99,7 +99,7 @@ public class MyCalendar {
         return s;
     }
 
-    private String calendarHeader(){
+    private String calendarHeader() {
         String s = "";
         DateFormat dateFormat = new SimpleDateFormat("M, Y");
         s += dateFormat.format(calendar.getTime()) + "\n";
@@ -108,28 +108,28 @@ public class MyCalendar {
         return s;
     }
 
-    private String calendarPreviousMonth(){
+    private String calendarPreviousMonth() {
         String s = "";
         s += colorSchema.COLOR_OTHER;
-        for (int j=0; j<firstDayOfMonthIndex; j++)
+        for (int j = 0; j < firstDayOfMonthIndex; j++)
             s += String.format("%4d ", monthCalendar[0][j]);
         s += colorSchema.COLOR_RESET;
         return s;
     }
 
-    private String calendarCurrentMonth(){
+    private String calendarCurrentMonth() {
         int indexFirstDayOfMonth = firstDayOfMonthIndex;
 
         String s = "";
         s += colorSchema.COLOR_WEEKDAY;
-        for (int i=0; i< WEEKS_COUNT; i++){
-            for (int j=indexFirstDayOfMonth; j< WEEK_SIZE; j++){
+        for (int i = 0; i < WEEKS_COUNT; i++) {
+            for (int j = indexFirstDayOfMonth; j < WEEK_SIZE; j++) {
 
-                s += choiceColorForThisDay(i,j);
+                s += choiceColorForThisDay(i, j);
                 s += formattedThisDay(i, j);
                 s += colorSchema.COLOR_RESET;
 
-                if (monthCalendar[i][j] == amountOfDaysInMonth){
+                if (monthCalendar[i][j] == amountOfDaysInMonth) {
                     return s;
                 }
             }
@@ -139,7 +139,7 @@ public class MyCalendar {
         return s;
     }
 
-    private String choiceColorForThisDay(int i, int j){
+    private String choiceColorForThisDay(int i, int j) {
         //System.out.println(i + " " + j);
         if (monthCalendar[i][j] == today)
             return colorSchema.COLOR_TODAY;
@@ -149,20 +149,20 @@ public class MyCalendar {
             return colorSchema.COLOR_WEEKDAY;
     }
 
-    private String formattedThisDay(int i, int j){
+    private String formattedThisDay(int i, int j) {
         return String.format("%4d ", monthCalendar[i][j]);
     }
 
-    private String calendarNextMonth(){
-        int lastNumberInCalendar = monthCalendar[WEEKS_COUNT-1][WEEK_SIZE-1];
+    private String calendarNextMonth() {
+        int lastNumberInCalendar = monthCalendar[WEEKS_COUNT - 1][WEEK_SIZE - 1];
 
         int startIndexI = WEEK_SIZE - (lastNumberInCalendar / WEEK_SIZE + 1) - 1;
         int startIndexJ = WEEK_SIZE - lastNumberInCalendar % WEEK_SIZE;
 
         String s = "";
         s += colorSchema.COLOR_OTHER;
-        for (int i=startIndexI; i< WEEKS_COUNT; i++){
-            for (int j=startIndexJ; j< WEEK_SIZE; j++){
+        for (int i = startIndexI; i < WEEKS_COUNT; i++) {
+            for (int j = startIndexJ; j < WEEK_SIZE; j++) {
                 s += formattedThisDay(i, j);
             }
             s += "\n";
