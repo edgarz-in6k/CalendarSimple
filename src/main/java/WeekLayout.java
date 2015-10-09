@@ -44,6 +44,7 @@ public enum WeekLayout {
         return secondHolidayIndex;
     }
 
+    //TODO get weekday names form calendar
     public abstract String header(ColorSchema colorSchema);
 
 }

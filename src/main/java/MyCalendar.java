@@ -64,6 +64,7 @@ public class MyCalendar {
 
     private int getDayOfMondayBasedWeekBeginWithZero() {
         DateFormat dateFormat = new SimpleDateFormat("u");
+        calendar.getActualMinimum(Calendar.DAY_OF_WEEK);
         calendar.set(Calendar.DAY_OF_MONTH, 0);
         int result = Integer.parseInt(dateFormat.format(calendar.getTime()));
         calendar = Calendar.getInstance();
@@ -71,14 +72,18 @@ public class MyCalendar {
     }
 
     private void buildCalendar() {
-        calendar.add(Calendar.DAY_OF_MONTH, -firstDayOfMonthIndex - today);
-        for (int i = 0; i < WEEKS_COUNT; i++) {
-            for (int j = 0; j < WEEK_SIZE; j++) {
+        rollbackCalendarToFirstDayOfFirstWeek();
+        for (int week = 0; week < WEEKS_COUNT; week++) {
+            for (int weekday = 0; weekday < WEEK_SIZE; weekday++) {
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
-                monthCalendar[i][j] = calendar.get(Calendar.DAY_OF_MONTH);
+                monthCalendar[week][weekday] = calendar.get(Calendar.DAY_OF_MONTH);
             }
         }
         calendar = Calendar.getInstance();
+    }
+
+    private void rollbackCalendarToFirstDayOfFirstWeek() {
+        calendar.add(Calendar.DAY_OF_MONTH, -firstDayOfMonthIndex - today);
     }
 
     public void print() {
@@ -101,18 +106,19 @@ public class MyCalendar {
 
     private String calendarHeader() {
         String s = "";
-        DateFormat dateFormat = new SimpleDateFormat("M, Y");
+        DateFormat dateFormat = new SimpleDateFormat("MMMM Y");
         s += dateFormat.format(calendar.getTime()) + "\n";
         s += weekLayout.header(colorSchema) + "\n";
-        s += colorSchema.COLOR_RESET;
         return s;
     }
 
     private String calendarPreviousMonth() {
+        int[] firstWeek = monthCalendar[0];
         String s = "";
         s += colorSchema.COLOR_OTHER;
-        for (int j = 0; j < firstDayOfMonthIndex; j++)
-            s += String.format("%4d ", monthCalendar[0][j]);
+        for (int weekday = 0; firstWeek[weekday] > 1; weekday++) {
+            s += formatDay(firstWeek[weekday]);
+        }
         s += colorSchema.COLOR_RESET;
         return s;
     }
@@ -150,7 +156,12 @@ public class MyCalendar {
     }
 
     private String formattedThisDay(int i, int j) {
-        return String.format("%4d ", monthCalendar[i][j]);
+        int day = monthCalendar[i][j];
+        return formatDay(day);
+    }
+
+    private String formatDay(int day) {
+        return String.format("%4d ", day);
     }
 
     private String calendarNextMonth() {
@@ -190,7 +201,6 @@ public class MyCalendar {
                 "\t</body>\n" +
                 "</html>");
         bw.close();
-        Desktop.getDesktop().browse(file.toURI());
 
         setColorSchema(tempColorSchema);
     }
