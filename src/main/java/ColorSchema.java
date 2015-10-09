@@ -48,4 +48,16 @@ public enum ColorSchema{
         this.COLOR_TODAY = COLOR_TODAY;
         this.COLOR_RESET = COLOR_RESET;
     }
+
+    String holiday(String day) {
+        return colorize(day, COLOR_HOLIDAY);
+    }
+
+    String weekday(String day) {
+        return colorize(day, COLOR_WEEKDAY);
+    }
+
+    String colorize(String day, String color){
+        return color + day + COLOR_RESET;
+    }
 }

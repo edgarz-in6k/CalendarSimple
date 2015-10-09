@@ -3,25 +3,37 @@ public enum WeekLayout {
             0,
             Day.SATURDAY.value(),
             Day.SUNDAY.value()
-    ),
+    ) {
+        @Override
+        public String header(ColorSchema colorSchema) {
+            return " " + colorSchema.weekday("Mon  Thu  Wed  Tue  Fri  ") +
+                    colorSchema.holiday("Sat  Sun");
+        }
+    },
     AMERICAN(
             1,
             Day.MONDAY.value(),
             Day.MONDAY.value()
-    );
+    ) {
+        @Override
+        public String header(ColorSchema colorSchema) {
+            return " " + colorSchema.holiday("Sun  ") +
+                    colorSchema.weekday("Mon  Thu  Wed  Tue  Fri  Sat");
+        }
+    };
 
-    private final int offsetForAmerican;
+    private final int offset;
     private final int firstHolidayIndex;
     private final int secondHolidayIndex;
 
-    WeekLayout(int offsetForAmerican, int firstHolidayIndex, int secondHolidayIndex) {
-        this.offsetForAmerican = offsetForAmerican;
+    WeekLayout(int offset, int firstHolidayIndex, int secondHolidayIndex) {
+        this.offset = offset;
         this.firstHolidayIndex = firstHolidayIndex;
         this.secondHolidayIndex = secondHolidayIndex;
     }
 
-    public int offsetForAmerican() {
-        return offsetForAmerican;
+    public int offset() {
+        return offset;
     }
 
     public int firstHolidayIndex() {
@@ -32,12 +44,6 @@ public enum WeekLayout {
         return secondHolidayIndex;
     }
 
-    public String header(ColorSchema colorSchema) {
-        if (this == WeekLayout.STANDARD)
-            return " " + colorSchema.COLOR_WEEKDAY + "Mon  Thu  Wed  Tue  Fri  " + colorSchema.COLOR_RESET +
-                    colorSchema.COLOR_HOLIDAY + "Sat  Sun" + colorSchema.COLOR_RESET;
-        else
-            return " " + colorSchema.COLOR_HOLIDAY + "Sun  " + colorSchema.COLOR_RESET +
-                    colorSchema.COLOR_WEEKDAY + "Mon  Thu  Wed  Tue  Fri  Sat" + colorSchema.COLOR_RESET;
-    }
+    public abstract String header(ColorSchema colorSchema);
+
 }

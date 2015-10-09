@@ -54,15 +54,15 @@ public class MyCalendar {
     }
 
     private void init() {
-        int dayOfWeekIndex = getDayOfWeekInNumberFormatBeginWithZero();
-        firstDayOfMonthIndex = dayOfWeekIndex + weekLayout.offsetForAmerican();
+        int dayOfWeekIndex = getDayOfMondayBasedWeekBeginWithZero();
+        firstDayOfMonthIndex = dayOfWeekIndex + weekLayout.offset();
 
         amountOfDaysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
         today = calendar.get(Calendar.DAY_OF_MONTH);
     }
 
-    private int getDayOfWeekInNumberFormatBeginWithZero() {
+    private int getDayOfMondayBasedWeekBeginWithZero() {
         DateFormat dateFormat = new SimpleDateFormat("u");
         calendar.set(Calendar.DAY_OF_MONTH, 0);
         int result = Integer.parseInt(dateFormat.format(calendar.getTime()));
