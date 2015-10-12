@@ -9,14 +9,14 @@ public abstract class PrinterMyCalendar {
 
     protected String startWrite(){
         DateFormat dateFormat = new SimpleDateFormat("MMMM Y");
-        return beginParagraphToken() + dateFormat.format(myCalendar.getTime()) + endParagraphToken();
+        return openParagraphToken() + dateFormat.format(myCalendar.getTime()) + closeParagraphToken();
     }
 
     protected String headerWrite(){
         String s = "";
-        s += beginRowToken();
+        s += openWeekToken();
         s += weekLayout.header(this);
-        s += endRowToken();
+        s += closeWeekToken();
         return s;
     }
 
@@ -29,9 +29,9 @@ public abstract class PrinterMyCalendar {
 
     protected String writeMonthPrev(){
         String s = "";
-        s += beginRowToken();
+        s += openWeekToken();
         for (int weekday = 0; weekday < myCalendar.getFirstDayOfMonthIndex(); weekday++)
-            s += beginOtherMonthDayToken() + formattedThisDay(0, weekday) + endToken();
+            s += openOtherMonthDayToken() + formattedThisDay(0, weekday) + closeDayToken();
         return s;
     }
 
@@ -41,17 +41,17 @@ public abstract class PrinterMyCalendar {
         String s = "";
         for (int week=0; week< MyCalendar.WEEKS_COUNT; week++){
             if (indexFirstDayOfMonth == 0)
-                s += beginRowToken();
+                s += openWeekToken();
             for (int weekday=indexFirstDayOfMonth; weekday< MyCalendar.WEEK_SIZE; weekday++){
 
-                s += choiceColorForThisDay(week,weekday) + formattedThisDay(week,weekday) + endToken();
+                s += choiceColorForThisDay(week,weekday) + formattedThisDay(week,weekday) + closeDayToken();
 
                 if (isEndMonthThis(week, weekday)){
                     coordinateStopOutput.set(week, weekday + 1);
                     return s;
                 }
             }
-            s += endRowToken();
+            s += closeWeekToken();
             indexFirstDayOfMonth = 0;
             coordinateStopOutput.set(week, 0);
         }
@@ -64,11 +64,11 @@ public abstract class PrinterMyCalendar {
 
     private String choiceColorForThisDay(int week, int weekday) {
         if (isToday(week,weekday))
-            return beginMonthTodayToken();
+            return openMonthTodayToken();
         else if (isHoliday(weekday))
-            return beginHolidayMonthDayToken();
+            return openHolidayMonthDayToken();
         else
-            return beginWeekMonthDayToken();
+            return openWeekMonthDayToken();
     }
 
     protected boolean isToday(int week, int weekday){
@@ -85,9 +85,9 @@ public abstract class PrinterMyCalendar {
         int startIndexWEEK_SIZE = coordinateStopOutput.getY();
         for (int week=startIndexWEEKS_COUNT; week< MyCalendar.WEEKS_COUNT; week++){
             for (int weekday=startIndexWEEK_SIZE; weekday< MyCalendar.WEEK_SIZE; weekday++){
-                s += beginOtherMonthDayToken() + formattedThisDay(week,weekday) + endToken();
+                s += openOtherMonthDayToken() + formattedThisDay(week,weekday) + closeDayToken();
             }
-            s += endRowToken();
+            s += closeWeekToken();
             startIndexWEEK_SIZE = 0;
         }
         return s;
@@ -119,15 +119,15 @@ public abstract class PrinterMyCalendar {
         formattedOutput(s);
     }
 
-    protected abstract String beginParagraphToken();
-    protected abstract String endParagraphToken();
-    protected abstract String beginRowToken();
-    protected abstract String endRowToken();
-    protected abstract String beginMonthTodayToken();
-    protected abstract String beginWeekMonthDayToken();
-    protected abstract String beginHolidayMonthDayToken();
-    protected abstract String beginOtherMonthDayToken();
-    protected abstract String endToken();
+    protected abstract String openParagraphToken();
+    protected abstract String closeParagraphToken();
+    protected abstract String openWeekToken();
+    protected abstract String closeWeekToken();
+    protected abstract String openMonthTodayToken();
+    protected abstract String openWeekMonthDayToken();
+    protected abstract String openHolidayMonthDayToken();
+    protected abstract String openOtherMonthDayToken();
+    protected abstract String closeDayToken();
 
     protected abstract void formattedOutput(String s);
 

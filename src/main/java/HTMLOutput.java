@@ -31,22 +31,22 @@ public class HTMLOutput extends PrinterMyCalendar{
     }
 
     @Override
-    protected String beginMonthTodayToken() {
+    protected String openMonthTodayToken() {
         return getStyle("blue");
     }
 
     @Override
-    protected String beginWeekMonthDayToken() {
+    protected String openWeekMonthDayToken() {
         return getStyle("green");
     }
 
     @Override
-    protected String beginHolidayMonthDayToken() {
+    protected String openHolidayMonthDayToken() {
         return getStyle("red");
     }
 
     @Override
-    protected String beginOtherMonthDayToken() {
+    protected String openOtherMonthDayToken() {
         return getStyle("black");
     }
 
@@ -55,7 +55,7 @@ public class HTMLOutput extends PrinterMyCalendar{
     }
 
     @Override
-    protected String endToken() {
+    protected String closeDayToken() {
         return "</td>\n";
     }
 
@@ -67,22 +67,22 @@ public class HTMLOutput extends PrinterMyCalendar{
     }
 
     @Override
-    protected String beginParagraphToken() {
+    protected String openParagraphToken() {
         return getStyle("black font-weight: bold");
     }
 
     @Override
-    protected String endParagraphToken() {
+    protected String closeParagraphToken() {
         return "</p>\n";
     }
 
     @Override
-    protected String beginRowToken() {
+    protected String openWeekToken() {
         return "\n\t\t\t<tr>\n";
     }
 
     @Override
-    protected String endRowToken() {
+    protected String closeWeekToken() {
         return "\t\t\t</tr>\n";
     }
 
