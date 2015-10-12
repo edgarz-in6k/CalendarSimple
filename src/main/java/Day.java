@@ -1,21 +1,39 @@
-import java.util.Calendar;
+public enum Day {
+    MONDAY(0, " Mon"),
+    TUESDAY(1, " Thu"),
+    WEDNESDAY(2, " Wed"),
+    THURSDAY(3, " Tue"),
+    FRIDAY(4, " Fri"),
+    SATURDAY(5, " Sat"),
+    SUNDAY(6, " Sun");
 
-public enum Day{
-    MONDAY(0),
-    TUESDAY(1),
-    WEDNESDAY(2),
-    THURSDAY(3),
-    FRIDAY(4),
-    SATURDAY(5),
-    SUNDAY(6);
+    int value;
+    int valueAmerican;
+    String name;
 
-    private int value;
-
-    Day(int value) {
+    Day(int value, String name) {
         this.value = value;
-    }
-
-    public int value() {
-        return value;
+        this.name = name;
+        valueAmerican = (value + 1) % MyCalendar.WEEK_SIZE;
     }
 }
+
+/*
+String toDay(int value){
+        for (Day day : Day.values()){
+            if (day.value == value)
+                return day.name;
+        }
+        //throw new IllegalArgumentException();
+        return "";
+    }
+
+    int toValue(String name){
+        for (Day day : Day.values()){
+            if (Objects.equals(day.name, name))
+                return day.value;
+        }
+        //throw new IllegalArgumentException();
+        return 0;
+    }
+*/

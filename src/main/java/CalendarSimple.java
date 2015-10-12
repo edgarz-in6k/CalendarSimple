@@ -3,15 +3,19 @@ import java.io.File;
 import java.io.IOException;
 
 public class CalendarSimple {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
+        MyCalendar myCalendar = new MyCalendar(WeekLayout.AMERICAN);
 
-        MyCalendar al = new MyCalendar(WeekLayout.AMERICAN);
-        al.println();
-        al.generateHTMLFile("calendar.html");
-        Desktop.getDesktop().browse(new File("calendar.html").toURI());
+        ConsoleOutput consoleOutput = new ConsoleOutput();
+        consoleOutput.output(myCalendar);
 
-        //new PrinterMyCalendar(al);
-
-        System.out.println();
+        String fileName = "calendar.html";
+        HTMLOutput htmlOutput = new HTMLOutput(fileName);
+        htmlOutput.output(myCalendar);
+        try {
+            Desktop.getDesktop().browse(new File(fileName).toURI());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
