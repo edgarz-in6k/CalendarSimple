@@ -1,3 +1,5 @@
+package data;
+
 public enum ColorASCII {
     BLACK("\u001B[30m"),
     RED("\u001B[31m"),
@@ -10,7 +12,7 @@ public enum ColorASCII {
     BACKGROUND("\u001b[44m"),
     RESET("\u001B[0m");
 
-    String color;
+    public String color;
 
     ColorASCII(String color) {
         this.color = color;
