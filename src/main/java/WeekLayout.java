@@ -1,41 +1,40 @@
 public enum WeekLayout {
     STANDARD(
             0,
-            Day.SATURDAY.value(),
-            Day.SUNDAY.value()
+            Day.SATURDAY.value,
+            Day.SUNDAY.value
     ) {
         @Override
-        public String header(ColorSchema colorSchema) {
-            return colorSchema.weekday(" Mon") +
-                    colorSchema.weekday("  Thu") +
-                    colorSchema.weekday("  Wed") +
-                    colorSchema.weekday("  Tue") +
-                    colorSchema.weekday("  Fri") +
-                    colorSchema.holiday("  Sat") +
-                    colorSchema.holiday("  Sun");
+        public String header(PrinterMyCalendar printerMyCalendar) {
+            return weekday(Day.MONDAY.name, printerMyCalendar) +
+                    weekday(Day.THURSDAY.name, printerMyCalendar) +
+                    weekday(Day.WEDNESDAY.name, printerMyCalendar) +
+                    weekday(Day.TUESDAY.name, printerMyCalendar) +
+                    weekday(Day.FRIDAY.name, printerMyCalendar) +
+                    holiday(Day.SATURDAY.name, printerMyCalendar) +
+                    holiday(Day.SUNDAY.name, printerMyCalendar);
         }
     },
     AMERICAN(
             1,
-            Day.MONDAY.value(),
-            Day.MONDAY.value()
+            Day.SUNDAY.valueAmerican,
+            Day.SUNDAY.valueAmerican
     ) {
         @Override
-        public String header(ColorSchema colorSchema) {
-            return colorSchema.holiday("  Sun") +
-                    colorSchema.weekday(" Mon") +
-                    colorSchema.weekday("  Thu") +
-                    colorSchema.weekday("  Wed") +
-                    colorSchema.weekday("  Tue") +
-                    colorSchema.weekday("  Fri") +
-                    colorSchema.weekday("  Sat");
+        public String header(PrinterMyCalendar printerMyCalendar) {
+            return holiday(Day.SUNDAY.name, printerMyCalendar) +
+                    weekday(Day.MONDAY.name, printerMyCalendar) +
+                    weekday(Day.THURSDAY.name, printerMyCalendar) +
+                    weekday(Day.WEDNESDAY.name, printerMyCalendar) +
+                    weekday(Day.TUESDAY.name, printerMyCalendar) +
+                    weekday(Day.FRIDAY.name, printerMyCalendar) +
+                    weekday(Day.SATURDAY.name, printerMyCalendar);
         }
     };
 
-    private final int offset;
-    private final int firstHolidayIndex;
-    private final int secondHolidayIndex;
-    //private final String[] namesDayOfWeek = {" Mon",  " Thu",  " Wed",  " Tue",  " Fri",  " Sat", " Sun"};
+    int offset;
+    int firstHolidayIndex;
+    int secondHolidayIndex;
 
     WeekLayout(int offset, int firstHolidayIndex, int secondHolidayIndex) {
         this.offset = offset;
@@ -43,23 +42,13 @@ public enum WeekLayout {
         this.secondHolidayIndex = secondHolidayIndex;
     }
 
-    public int offset() {
-        return offset;
+    String weekday(String name, PrinterMyCalendar printerMyCalendar){
+        return printerMyCalendar.beginItemWeekday() + name + printerMyCalendar.endItem();
     }
 
-    public int firstHolidayIndex() {
-        return firstHolidayIndex;
+    String holiday(String name, PrinterMyCalendar printerMyCalendar){
+        return printerMyCalendar.beginItemHoliday() + name + printerMyCalendar.endItem();
     }
 
-    public int secondHolidayIndex() {
-        return secondHolidayIndex;
-    }
-
-    public boolean isHoliday(int i, int j){
-        return (j == firstHolidayIndex() || j == secondHolidayIndex());
-    }
-
-    //TODO get weekday names form calendar
-    public abstract String header(ColorSchema colorSchema);
-
+    public abstract String header(PrinterMyCalendar printerMyCalendar);
 }
