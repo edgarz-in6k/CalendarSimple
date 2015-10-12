@@ -1,13 +1,17 @@
+package print;
+
+import print.PrinterMyCalendar;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class HTMLOutput extends PrinterMyCalendar{
+public class HTMLOutput extends PrinterMyCalendar {
 
     private String path;
 
-    HTMLOutput(String path){
+    public HTMLOutput(String path){
         this.path = path;
     }
 
@@ -68,7 +72,7 @@ public class HTMLOutput extends PrinterMyCalendar{
 
     @Override
     protected String openParagraphToken() {
-        return getStyle("black font-weight: bold");
+        return "\t\t\t\t<p style=\" font-weight: bold\">";
     }
 
     @Override

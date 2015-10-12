@@ -1,3 +1,8 @@
+package print;
+
+import data.ColorASCII;
+import print.PrinterMyCalendar;
+
 public class ConsoleOutput extends PrinterMyCalendar {
 
     private final String newLine = "\n";

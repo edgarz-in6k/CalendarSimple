@@ -1,13 +1,11 @@
-import month.Month;
-
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.util.Calendar;
+import data.WeekLayout;
+import month.MyCalendar;
+import print.ConsoleOutput;
+import print.HTMLOutput;
 
 public class CalendarSimple {
     public static void main(String[] args) {
-        /*MyCalendar myCalendar = new MyCalendar(WeekLayout.STANDARD);
+        MyCalendar myCalendar = new MyCalendar(WeekLayout.STANDARD);
 
         ConsoleOutput consoleOutput = new ConsoleOutput();
         consoleOutput.output(myCalendar);
@@ -15,12 +13,18 @@ public class CalendarSimple {
         String fileName = "calendar.html";
         HTMLOutput htmlOutput = new HTMLOutput(fileName);
         htmlOutput.output(myCalendar);
-        try {
+        /*try {
             Desktop.getDesktop().browse(new File(fileName).toURI());
         } catch (IOException e) {
             e.printStackTrace();
         }*/
 
-        Month month = new Month(Calendar.getInstance());
+        /*month.Month month = myCalendar.getMonth();
+        for (Week w : month){
+            for (Day day : w){
+                System.out.print(day.getDayOfMonth() + " ");
+            }
+            System.out.println();
+        }*/
     }
 }

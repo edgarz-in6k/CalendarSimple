@@ -1,4 +1,6 @@
-public enum Day {
+package data;
+
+public enum DayWeek {
     MONDAY(0, " Mon"),
     TUESDAY(1, " Thu"),
     WEDNESDAY(2, " Wed"),
@@ -10,17 +12,18 @@ public enum Day {
     int value;
     int valueAmerican;
     String name;
+    private final int WEEK_SIZE = 7;
 
-    Day(int value, String name) {
+    DayWeek(int value, String name) {
         this.value = value;
         this.name = name;
-        valueAmerican = (value + 1) % MyCalendar.WEEK_SIZE;
+        valueAmerican = (value + 1) % WEEK_SIZE;
     }
 }
 
 /*
 String toDay(int value){
-        for (Day day : Day.values()){
+        for (data.DayWeek day : data.DayWeek.values()){
             if (day.value == value)
                 return day.name;
         }
@@ -29,7 +32,7 @@ String toDay(int value){
     }
 
     int toValue(String name){
-        for (Day day : Day.values()){
+        for (data.DayWeek day : data.DayWeek.values()){
             if (Objects.equals(day.name, name))
                 return day.value;
         }

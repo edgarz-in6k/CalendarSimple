@@ -7,49 +7,47 @@ public class Day {
     private int dayOfWeek;
     private int dayOfMonth;
 
-    private int numberMonth;
-    private int numberYear;
+    private int indexMonth;
+    private int indexYear;
 
     private boolean weekday;
 
-    Day(Calendar calendar){
-        dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-        dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+    public Day(Calendar calendar) {
+        Calendar tempCalendar = Calendar.getInstance();
+        tempCalendar.setTime(calendar.getTime());
 
-        numberMonth = calendar.get(Calendar.MONTH);
-        numberYear = calendar.get(Calendar.YEAR);
+        dayOfMonth = tempCalendar.get(Calendar.DAY_OF_MONTH);
+        dayOfWeek = tempCalendar.get(Calendar.DAY_OF_WEEK);
+
+        indexMonth = tempCalendar.get(Calendar.MONTH);
+        indexYear = calendar.get(Calendar.YEAR);
 
         weekday = (dayOfWeek != Calendar.SATURDAY && dayOfWeek != Calendar.SUNDAY);
-
-        System.out.print(dayOfMonth + " ");
-        if (dayOfWeek == Calendar.SUNDAY)
-            System.out.println();
     }
 
-    boolean isWeekday(){
+    public boolean isWeekday() {
         return weekday;
     }
 
-    boolean isInMonth(Month month){
-        return (numberMonth == month.getMonthOfYear() && numberYear == month.getYear());
+    public boolean isInMonth(Month month) {
+        return (getIndexMonth() == month.getMonth() && getIndexYear() == month.getYear());
     }
 
-    boolean isDayEquals(Day day){
-        return (
-                getDayOfMonth() == day.getDayOfMonth() &&
-                getNumberMonth() == day.getNumberMonth() &&
-                getNumberYear() == day.getNumberYear());
+    public boolean isDayEquals(Day day) {
+        return (getDayOfMonth() == day.getDayOfMonth() &&
+                getIndexMonth() == day.getIndexMonth() &&
+                getIndexYear() == day.getIndexYear());
     }
 
     public int getDayOfMonth() {
         return dayOfMonth;
     }
 
-    public int getNumberMonth() {
-        return numberMonth;
+    public int getIndexMonth() {
+        return indexMonth;
     }
 
-    public int getNumberYear() {
-        return numberYear;
+    public int getIndexYear() {
+        return indexYear;
     }
 }
