@@ -73,8 +73,8 @@ public class MyCalendar {
         return today;
     }
 
-    public int[][] getMonthCalendar() {
-        return monthCalendar;
+    public int getDayWithMonthCalendar(int week, int weekday) {
+        return monthCalendar[week][weekday];
     }
 
     public Date getTime(){

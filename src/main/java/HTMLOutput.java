@@ -12,69 +12,77 @@ public class HTMLOutput extends PrinterMyCalendar{
     }
 
     @Override
-    protected String startOutput(){
+    protected String startWrite(){
+        return headHTML(namesMonthsOutput());
+    }
+
+    private String headHTML(String namesMonths){
         return "<!DOCTYPE html>\n" +
                 "<html>\n" +
                 "\t<head>\n" +
                 "\t</head>\n" +
                 "\t<body>\n" +
-                nameMonthOutput() +
+                namesMonths +
                 "\t\t<table cellpadding=\"5\" cellspacing=\"0\" border=\"1\">\n";
     }
 
-    private String nameMonthOutput(){
-        return super.startOutput();
+    private String namesMonthsOutput(){
+        return super.startWrite();
     }
 
     @Override
-    protected String beginItemToday() {
-        return "\t\t\t\t<td style=\"color: white; background-color: blue\">";
+    protected String beginMonthTodayToken() {
+        return getStyle("blue");
     }
 
     @Override
-    protected String beginItemWeekday() {
-        return "\t\t\t\t<td style=\"color: green\">";
+    protected String beginWeekMonthDayToken() {
+        return getStyle("green");
     }
 
     @Override
-    protected String beginItemHoliday() {
-        return "\t\t\t\t<td style=\"color: red\">";
+    protected String beginHolidayMonthDayToken() {
+        return getStyle("red");
     }
 
     @Override
-    protected String beginItemAnotherDay() {
-        return "\t\t\t\t<td style=\"color: black\">";
+    protected String beginOtherMonthDayToken() {
+        return getStyle("black");
+    }
+
+    private String getStyle(String color) {
+        return "\t\t\t\t<td style=\"color: " + color + "\">";
     }
 
     @Override
-    protected String endItem() {
+    protected String endToken() {
         return "</td>\n";
     }
 
     @Override
-    protected String endOutput(){
+    protected String endWrite(){
         return "\t\t</table>\n" +
                 "\t</body>\n" +
                 "</html>";
     }
 
     @Override
-    protected String beginParagraph() {
-        return "\t\t\t<p style=\"font-weight: bold\">";
+    protected String beginParagraphToken() {
+        return getStyle("black font-weight: bold");
     }
 
     @Override
-    protected String endParagraph() {
+    protected String endParagraphToken() {
         return "</p>\n";
     }
 
     @Override
-    protected String beginRow() {
+    protected String beginRowToken() {
         return "\n\t\t\t<tr>\n";
     }
 
     @Override
-    protected String endRow() {
+    protected String endRowToken() {
         return "\t\t\t</tr>\n";
     }
 

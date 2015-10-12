@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class CalendarSimple {
     public static void main(String[] args) {
-        MyCalendar myCalendar = new MyCalendar(WeekLayout.AMERICAN);
+        MyCalendar myCalendar = new MyCalendar(WeekLayout.STANDARD);
 
         ConsoleOutput consoleOutput = new ConsoleOutput();
         consoleOutput.output(myCalendar);

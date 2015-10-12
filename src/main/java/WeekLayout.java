@@ -43,11 +43,11 @@ public enum WeekLayout {
     }
 
     String weekday(String name, PrinterMyCalendar printerMyCalendar){
-        return printerMyCalendar.beginItemWeekday() + name + printerMyCalendar.endItem();
+        return printerMyCalendar.beginWeekMonthDayToken() + name + printerMyCalendar.endToken();
     }
 
     String holiday(String name, PrinterMyCalendar printerMyCalendar){
-        return printerMyCalendar.beginItemHoliday() + name + printerMyCalendar.endItem();
+        return printerMyCalendar.beginHolidayMonthDayToken() + name + printerMyCalendar.endToken();
     }
 
     public abstract String header(PrinterMyCalendar printerMyCalendar);

@@ -1,47 +1,50 @@
 public class ConsoleOutput extends PrinterMyCalendar {
 
+    private final String newLine = "\n";
+    private final String none = "";
+
     @Override
-    protected String beginParagraph() {
-        return "";
+    protected String beginParagraphToken() {
+        return none;
     }
 
     @Override
-    protected String endParagraph() {
-        return "\n";
+    protected String endParagraphToken() {
+        return newLine;
     }
 
     @Override
-    protected String beginRow() {
-        return "";
+    protected String beginRowToken() {
+        return none;
     }
 
     @Override
-    protected String endRow() {
-        return "\n";
+    protected String endRowToken() {
+        return newLine;
     }
 
     @Override
-    protected String beginItemToday() {
+    protected String beginMonthTodayToken() {
         return ColorASCII.BACKGROUND.color;
     }
 
     @Override
-    protected String beginItemWeekday() {
+    protected String beginWeekMonthDayToken() {
         return ColorASCII.GREEN.color;
     }
 
     @Override
-    protected String beginItemHoliday() {
+    protected String beginHolidayMonthDayToken() {
         return ColorASCII.RED.color;
     }
 
     @Override
-    protected String endItem() {
+    protected String endToken() {
         return ColorASCII.RESET.color;
     }
 
     @Override
-    protected String beginItemAnotherDay() {
+    protected String beginOtherMonthDayToken() {
         return ColorASCII.BLACK.color;
     }
 
