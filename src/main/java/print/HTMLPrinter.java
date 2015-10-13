@@ -1,100 +1,92 @@
 package print;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import month.Month;
 
-public class HTMLPrinter extends MonthPrinter {
+public class HTMLPrinter extends AbstractMonthPrinter {
 
-    private String path;
+    public static final String TAB = "\t";
+    public static final String TAB_TWO = TAB + "\t";
+    public static final String TAB_THREE = TAB_TWO + TAB;
+    public static final String TAB_FOUR = TAB_THREE + TAB;
+    public static final String FONT_WEIGHT = TAB_FOUR + "<p style=\" font-weight: bold\">";
+    public static final String NEW_LINE = "\n";
+    public static final String CLOSE_TD = "</td>" + NEW_LINE;
+    public static final String CLOSE_P = "</p>" + NEW_LINE;
+    public static final String OPEN_TR = NEW_LINE + TAB_THREE + "<tr>" + NEW_LINE;
+    public static final String CLOSE_TR = TAB_THREE + "</tr>" + NEW_LINE;
+    public static final String TABLE_BODY_HTML = TAB_TWO + "</table>" + NEW_LINE + TAB + "</body>" + NEW_LINE + "</html>";
+    public static final String DOCTYPE_HTML_BODY = "<!DOCTYPE html>" + NEW_LINE + "<html>" + NEW_LINE + TAB + "<body>" + NEW_LINE;
+    public static final String TABLE_CELLPADDING_CELLSPACING_BORDER = TAB_TWO + "<table cellpadding=\"5\" cellspacing=\"0\" border=\"1\">" + NEW_LINE;
+    public static final String TD_STYLE_COLOR = "<td style=\"color: ";
+    public static final String CLOSE_TEG = "\">";
 
-    public HTMLPrinter(String path){
-        this.path = path;
+    private String path = "calendar.html";
+
+    public HTMLPrinter(Month month){
+        super(month);
     }
 
     @Override
-    protected String startWrite(){
-        return headHTML(namesMonthsOutput());
-    }
-
-    private String headHTML(String namesMonths){
-        return "<!DOCTYPE html>\n" +
-                "<html>\n" +
-                "\t<head>\n" +
-                "\t</head>\n" +
-                "\t<body>\n" +
-                namesMonths +
-                "\t\t<table cellpadding=\"5\" cellspacing=\"0\" border=\"1\">\n";
-    }
-
-    private String namesMonthsOutput(){
-        return super.startWrite();
+    protected String buildBegin(){
+        return DOCTYPE_HTML_BODY;
     }
 
     @Override
-    protected String openMonthTodayToken() {
+    protected String buildTitle(){
+        return super.buildTitle() + TABLE_CELLPADDING_CELLSPACING_BORDER;
+    }
+
+    @Override
+    protected String openTodayToken() {
         return getStyle("white; background-color: blue");
     }
 
     @Override
-    protected String openWeekMonthDayToken() {
+    protected String openWorkdayToken() {
         return getStyle("green");
     }
 
     @Override
-    protected String openHolidayMonthDayToken() {
+    protected String openWeekendToken() {
         return getStyle("red");
     }
 
     @Override
-    protected String openOtherMonthDayToken() {
+    protected String openOtherDayToken() {
         return getStyle("black");
     }
 
     private String getStyle(String color) {
-        return "\t\t\t\t<td style=\"color: " + color + "\">";
+        return TAB_FOUR + TD_STYLE_COLOR + color + CLOSE_TEG;
     }
 
     @Override
     protected String closeDayToken() {
-        return "</td>\n";
+        return CLOSE_TD;
     }
 
     @Override
-    protected String endWrite(){
-        return "\t\t</table>\n" +
-                "\t</body>\n" +
-                "</html>";
+    protected String buildEnd(){
+        return TABLE_BODY_HTML;
     }
 
     @Override
     protected String openParagraphToken() {
-        return "\t\t\t\t<p style=\" font-weight: bold\">";
+        return FONT_WEIGHT;
     }
 
     @Override
     protected String closeParagraphToken() {
-        return "</p>\n";
+        return CLOSE_P;
     }
 
     @Override
     protected String openWeekToken() {
-        return "\n\t\t\t<tr>\n";
+        return OPEN_TR;
     }
 
     @Override
     protected String closeWeekToken() {
-        return "\t\t\t</tr>\n";
-    }
-
-    @Override
-    protected void outputToStream(String s) {
-        File file = new File(path);
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))){
-            bw.write(s);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return CLOSE_TR;
     }
 }

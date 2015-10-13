@@ -1,11 +1,16 @@
 package print;
 
 import data.ColorASCII;
+import month.Month;
 
-public class ConsolePrinter extends MonthPrinter {
+public class ConsolePrinter extends AbstractMonthPrinter {
 
-    private final String newLine = "\n";
-    private final String none = "";
+    private static final String newLine = "\n";
+    private static final String none = "";
+
+    public ConsolePrinter(Month month) {
+        super(month);
+    }
 
     @Override
     protected String openParagraphToken() {
@@ -28,17 +33,17 @@ public class ConsolePrinter extends MonthPrinter {
     }
 
     @Override
-    protected String openMonthTodayToken() {
+    protected String openTodayToken() {
         return ColorASCII.BACKGROUND.color;
     }
 
     @Override
-    protected String openWeekMonthDayToken() {
+    protected String openWorkdayToken() {
         return ColorASCII.GREEN.color;
     }
 
     @Override
-    protected String openHolidayMonthDayToken() {
+    protected String openWeekendToken() {
         return ColorASCII.RED.color;
     }
 
@@ -48,12 +53,7 @@ public class ConsolePrinter extends MonthPrinter {
     }
 
     @Override
-    protected String openOtherMonthDayToken() {
+    protected String openOtherDayToken() {
         return ColorASCII.BLACK.color;
-    }
-
-    @Override
-    protected void outputToStream(String s) {
-        System.out.println(s);
     }
 }

@@ -1,53 +1,48 @@
 package month;
 
+import data.WeekLayout;
+
 import java.util.Calendar;
 
 public class Day {
 
-    private int dayOfWeek;
     private int dayOfMonth;
+    private int dayOfWeek;
+    private int monthNumber;
+    private int year;
+    private WeekLayout weekLayout;
 
-    private int indexMonth;
-    private int indexYear;
-
-    private boolean weekday;
-
-    public Day(Calendar calendar) {
-        Calendar tempCalendar = Calendar.getInstance();
-        tempCalendar.setTime(calendar.getTime());
-
-        dayOfMonth = tempCalendar.get(Calendar.DAY_OF_MONTH);
-        dayOfWeek = tempCalendar.get(Calendar.DAY_OF_WEEK);
-
-        indexMonth = tempCalendar.get(Calendar.MONTH);
-        indexYear = calendar.get(Calendar.YEAR);
-
-        weekday = (dayOfWeek != Calendar.SATURDAY && dayOfWeek != Calendar.SUNDAY);
+    public Day(Calendar calendar, WeekLayout weekLayout) {
+        init(calendar, weekLayout);
     }
 
-    public boolean isWeekday() {
-        return weekday;
+    private void init(Calendar calendar, WeekLayout weekLayout){
+        this.weekLayout = weekLayout;
+        dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        monthNumber = calendar.get(Calendar.MONTH);
+        year = calendar.get(Calendar.YEAR);
+    }
+
+    public boolean isWeekend() {
+        return weekLayout.isWeekend(dayOfWeek);
     }
 
     public boolean isInMonth(Month month) {
-        return (getIndexMonth() == month.getMonth() && getIndexYear() == month.getYear());
+        return (monthNumber == month.getMonth() && year == month.getYear());
     }
 
-    public boolean isDayEquals(Day day) {
-        return (getDayOfMonth() == day.getDayOfMonth() &&
-                getIndexMonth() == day.getIndexMonth() &&
-                getIndexYear() == day.getIndexYear());
+    public boolean isDayEquals(Calendar calendar){
+        return (dayOfMonth == calendar.get(Calendar.DAY_OF_MONTH) &&
+                monthNumber == calendar.get(Calendar.MONTH) &&
+                year == calendar.get(Calendar.YEAR));
     }
 
     public int getDayOfMonth() {
         return dayOfMonth;
     }
 
-    public int getIndexMonth() {
-        return indexMonth;
-    }
-
-    public int getIndexYear() {
-        return indexYear;
+    public boolean isCurrent() {
+        return  isDayEquals(Calendar.getInstance());
     }
 }
