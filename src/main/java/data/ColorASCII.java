@@ -12,7 +12,7 @@ public enum ColorASCII {
     BACKGROUND("\u001b[44m"),
     RESET("\u001B[0m");
 
-    public String color;
+    public final String color;
 
     ColorASCII(String color) {
         this.color = color;

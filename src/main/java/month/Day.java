@@ -32,17 +32,19 @@ public class Day {
         return (monthNumber == month.getMonth() && year == month.getYear());
     }
 
-    public boolean isDayEquals(Calendar calendar){
-        return (dayOfMonth == calendar.get(Calendar.DAY_OF_MONTH) &&
-                monthNumber == calendar.get(Calendar.MONTH) &&
-                year == calendar.get(Calendar.YEAR));
-    }
-
     public int getDayOfMonth() {
         return dayOfMonth;
     }
 
-    public boolean isCurrent() {
-        return  isDayEquals(Calendar.getInstance());
+    public int getDayOfWeek() {
+        return dayOfWeek;
+    }
+
+    public int getMonthNumber() {
+        return monthNumber;
+    }
+
+    public int getYear() {
+        return year;
     }
 }

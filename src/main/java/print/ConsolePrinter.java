@@ -5,31 +5,31 @@ import month.Month;
 
 public class ConsolePrinter extends AbstractMonthPrinter {
 
-    private static final String newLine = "\n";
-    private static final String none = "";
+    private static final String NEW_LINE = "\n";
+    private static final String NONE = "";
 
     public ConsolePrinter(Month month) {
         super(month);
     }
 
     @Override
-    protected String openParagraphToken() {
-        return none;
+    protected String openTitleToken() {
+        return NONE;
     }
 
     @Override
-    protected String closeParagraphToken() {
-        return newLine;
+    protected String closeTitleToken() {
+        return NEW_LINE;
     }
 
     @Override
     protected String openWeekToken() {
-        return none;
+        return NONE;
     }
 
     @Override
     protected String closeWeekToken() {
-        return newLine;
+        return NEW_LINE;
     }
 
     @Override

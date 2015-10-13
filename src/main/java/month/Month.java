@@ -33,7 +33,7 @@ public class Month implements Iterable<Week> {
         month = tempCalendar.get(Calendar.MONTH);
         year = tempCalendar.get(Calendar.YEAR);
         tempCalendar.set(Calendar.DAY_OF_MONTH, 1);
-        tempCalendar.add(Calendar.DAY_OF_WEEK, - calendar.get(Calendar.DAY_OF_WEEK));
+        tempCalendar.add(Calendar.DAY_OF_WEEK, - 3);/////
         tempCalendar.add(Calendar.DAY_OF_WEEK,  - weekLayout.OFFSET_RELATIVE_OF_STANDARD);
     }
 

@@ -6,8 +6,8 @@ import month.Month;
 import month.Week;
 
 import java.io.PrintStream;
+import java.text.DateFormatSymbols;
 import java.util.Calendar;
-import java.util.Locale;
 
 public abstract class AbstractMonthPrinter {
 
@@ -37,16 +37,14 @@ public abstract class AbstractMonthPrinter {
     }
 
     protected String buildBegin() {
-        String result = "";
-
-        return result;
+        return "";
     }
 
 
     protected String buildTitle(){
-        return openParagraphToken() +
+        return openTitleToken() +
                 month.getMonth() + COMMA_AND_SPACE + month.getYear() +
-                closeParagraphToken();
+                closeTitleToken();
     }
 
     private String buildHeader(){
@@ -64,7 +62,7 @@ public abstract class AbstractMonthPrinter {
 
         for (int day : weekLayout.header()){
             result += weekLayout.isWeekend(day) ? openWeekendToken() : openWorkdayToken();
-            result += formattedDay(day);
+            result += formattedShortWeekdaysForTitle(day);
             result += closeDayToken();
         }
 
@@ -87,7 +85,7 @@ public abstract class AbstractMonthPrinter {
         String result = "";
 
         for (Day day : week)
-            result += choiceOpenDayToken(day) + formattedDay(day) + closeDayToken();
+            result += choiceOpenDayToken(day) + formattedDayOfMonth(day) + closeDayToken();
 
         return result;
     }
@@ -95,21 +93,26 @@ public abstract class AbstractMonthPrinter {
     private String choiceOpenDayToken(Day day){
         if (!day.isInMonth(month)) return openOtherDayToken();
 
-        if (day.isCurrent()) return openTodayToken();
+        if (isCurrentDay(day)) return openTodayToken();
 
         if (day.isWeekend()) return openWeekendToken();
 
         return openWorkdayToken();
     }
 
-    private String formattedDay(Day day){
+    private boolean isCurrentDay(Day day){
+        Calendar calendar = Calendar.getInstance();
+        return (day.getDayOfMonth() == calendar.get(Calendar.DAY_OF_MONTH) &&
+                day.getMonthNumber() == calendar.get(Calendar.MONTH) &&
+                day.getYear() == calendar.get(Calendar.YEAR));
+    }
+
+    private String formattedDayOfMonth(Day day){
         return String.format("%4d", day.getDayOfMonth());
     }
 
-    private String formattedDay(int day){
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_WEEK, day);
-        return String.format("%s ", calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()));//DateFormatSymbols.getInstance().getMonths()[day]
+    private String formattedShortWeekdaysForTitle(int day){
+        return String.format("%s ", DateFormatSymbols.getInstance().getShortWeekdays()[day]);
     }
 
     protected String buildEnd(){
@@ -124,8 +127,8 @@ public abstract class AbstractMonthPrinter {
         this.month = month;
     }
 
-    protected abstract String openParagraphToken();
-    protected abstract String closeParagraphToken();
+    protected abstract String openTitleToken();
+    protected abstract String closeTitleToken();
 
     protected abstract String openWeekToken();
     protected abstract String closeWeekToken();

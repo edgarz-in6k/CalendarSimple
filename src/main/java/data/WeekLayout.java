@@ -6,7 +6,14 @@ public enum WeekLayout {
     STANDARD(0) {
         @Override
         public int[] header() {
-            return new int[]{Calendar.MONDAY, Calendar.THURSDAY, Calendar.WEDNESDAY, Calendar.TUESDAY, Calendar.FRIDAY, Calendar.SATURDAY, Calendar.SUNDAY};
+            return new int[]{
+                    Calendar.MONDAY,
+                    Calendar.THURSDAY,
+                    Calendar.WEDNESDAY,
+                    Calendar.TUESDAY,
+                    Calendar.FRIDAY,
+                    Calendar.SATURDAY,
+                    Calendar.SUNDAY};
         }
 
         @Override
@@ -17,12 +24,18 @@ public enum WeekLayout {
     AMERICAN(1) {
         @Override
         public int[] header() {
-            return new int[]{Calendar.SUNDAY, Calendar.MONDAY, Calendar.THURSDAY, Calendar.WEDNESDAY, Calendar.TUESDAY, Calendar.FRIDAY, Calendar.SATURDAY};
+            return new int[]{Calendar.SUNDAY,
+                    Calendar.MONDAY,
+                    Calendar.THURSDAY,
+                    Calendar.WEDNESDAY,
+                    Calendar.TUESDAY,
+                    Calendar.FRIDAY,
+                    Calendar.SATURDAY};
         }
 
         @Override
         public boolean isWeekend(int dayWeek) {
-            return dayWeek == Calendar.SUNDAY || dayWeek == Calendar.SUNDAY;
+            return dayWeek == Calendar.SUNDAY;
         }
     };
 
@@ -33,5 +46,6 @@ public enum WeekLayout {
     }
 
     public abstract int[] header();
+
     public abstract boolean isWeekend(int dayWeek);
 }
