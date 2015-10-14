@@ -1,6 +1,6 @@
 package print;
 
-import month.Month;
+import month.MonthCalendar;
 
 public class HTMLPrinter extends AbstractMonthPrinter {
 
@@ -22,7 +22,7 @@ public class HTMLPrinter extends AbstractMonthPrinter {
 
     private String path = "calendar.html";
 
-    public HTMLPrinter(Month month){
+    public HTMLPrinter(MonthCalendar month){
         super(month);
     }
 

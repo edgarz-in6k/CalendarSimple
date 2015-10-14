@@ -1,15 +1,16 @@
 import data.WeekLayout;
-import month.Month;
+import month.MonthCalendar;
 import print.ConsolePrinter;
 import print.HTMLPrinter;
 
 import java.awt.*;
 import java.io.*;
-import java.util.Calendar;
+import java.time.LocalDate;
 
 public class CalendarSimple {
     public static void main(String[] args) throws IOException {
-        Month month = new Month(Calendar.getInstance(), WeekLayout.AMERICAN);
+        LocalDate localDate = LocalDate.of(2015, 10, 1);
+        MonthCalendar month = new MonthCalendar(localDate, WeekLayout.STANDARD);
 
         ConsolePrinter consolePrinter = new ConsolePrinter(month);
         consolePrinter.printToStream(System.out);
@@ -25,13 +26,3 @@ public class CalendarSimple {
         Desktop.getDesktop().browse(new File(fileName).toURI());
     }
 }
-
-/*month.Month month = myCalendar.getMonth();
-        for (Week w : month){
-            for (Day day : w){
-                System.out.print(day.getDayOfMonth() + " ");
-            }
-            System.out.println();
-        }*/
-//private String[] namesDay = {" Mon", " Thu", " Wed", " Tue", " Fri", " Sat", " Sun"};
-//int[] nameDays = {Calendar.MONDAY, Calendar.THURSDAY, Calendar.WEDNESDAY, Calendar.TUESDAY, Calendar.FRIDAY, Calendar.SATURDAY, Calendar.SUNDAY};

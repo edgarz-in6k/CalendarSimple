@@ -1,51 +1,61 @@
 package data;
 
-import java.util.Calendar;
+import java.time.DayOfWeek;
 
 public enum WeekLayout {
     STANDARD(0) {
         @Override
-        public int[] header() {
-            return new int[]{
-                    Calendar.MONDAY,
-                    Calendar.THURSDAY,
-                    Calendar.WEDNESDAY,
-                    Calendar.TUESDAY,
-                    Calendar.FRIDAY,
-                    Calendar.SATURDAY,
-                    Calendar.SUNDAY};
+        public DayOfWeek[] header() {
+            return new DayOfWeek[]{
+                    DayOfWeek.MONDAY,
+                    DayOfWeek.TUESDAY,
+                    DayOfWeek.WEDNESDAY,
+                    DayOfWeek.THURSDAY,
+                    DayOfWeek.FRIDAY,
+                    DayOfWeek.SATURDAY,
+                    DayOfWeek.SUNDAY};
         }
 
         @Override
-        public boolean isWeekend(int dayWeek) {
-            return dayWeek == Calendar.SATURDAY || dayWeek == Calendar.SUNDAY;
+        public boolean isWeekend(DayOfWeek dayWeek) {
+            return dayWeek == DayOfWeek.SATURDAY || dayWeek == DayOfWeek.SUNDAY;
+        }
+
+        @Override
+        public DayOfWeek getStartDayOfWeek() {
+            return DayOfWeek.MONDAY;
         }
     },
     AMERICAN(1) {
         @Override
-        public int[] header() {
-            return new int[]{Calendar.SUNDAY,
-                    Calendar.MONDAY,
-                    Calendar.THURSDAY,
-                    Calendar.WEDNESDAY,
-                    Calendar.TUESDAY,
-                    Calendar.FRIDAY,
-                    Calendar.SATURDAY};
+        public DayOfWeek[] header() {
+            return new DayOfWeek[]{DayOfWeek.SUNDAY,
+                    DayOfWeek.MONDAY,
+                    DayOfWeek.TUESDAY,
+                    DayOfWeek.WEDNESDAY,
+                    DayOfWeek.THURSDAY,
+                    DayOfWeek.FRIDAY,
+                    DayOfWeek.SATURDAY};
         }
 
         @Override
-        public boolean isWeekend(int dayWeek) {
-            return dayWeek == Calendar.SUNDAY;
+        public boolean isWeekend(DayOfWeek dayWeek) {
+            return dayWeek == DayOfWeek.SUNDAY;
+        }
+
+        @Override
+        public DayOfWeek getStartDayOfWeek() {
+            return DayOfWeek.SUNDAY;
         }
     };
 
-    public int OFFSET_RELATIVE_OF_STANDARD;
+    public final int OFFSET_RELATIVE_OF_STANDARD;
 
     WeekLayout(int OFFSET_RELATIVE_OF_STANDARD) {
         this.OFFSET_RELATIVE_OF_STANDARD = OFFSET_RELATIVE_OF_STANDARD;
     }
 
-    public abstract int[] header();
-
-    public abstract boolean isWeekend(int dayWeek);
+    public abstract DayOfWeek[] header();
+    public abstract boolean isWeekend(DayOfWeek dayWeek);
+    public abstract DayOfWeek getStartDayOfWeek();
 }

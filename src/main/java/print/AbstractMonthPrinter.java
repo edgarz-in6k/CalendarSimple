@@ -1,21 +1,23 @@
 package print;
 
 import data.WeekLayout;
-import month.Day;
-import month.Month;
-import month.Week;
+import month.DayCalendar;
+import month.MonthCalendar;
+import month.WeekCalendar;
 
 import java.io.PrintStream;
-import java.text.DateFormatSymbols;
-import java.util.Calendar;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.TextStyle;
+import java.util.Locale;
 
 public abstract class AbstractMonthPrinter {
 
     public static final String COMMA_AND_SPACE = ", ";
-    protected Month month;
+    protected MonthCalendar month;
     protected WeekLayout weekLayout;
 
-    public AbstractMonthPrinter(Month month){
+    public AbstractMonthPrinter(MonthCalendar month){
         setMonth(month);
         setWeekLayout(month.getWeekLayout());
     }
@@ -43,7 +45,9 @@ public abstract class AbstractMonthPrinter {
 
     protected String buildTitle(){
         return openTitleToken() +
-                month.getMonth() + COMMA_AND_SPACE + month.getYear() +
+                month.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH) +
+                COMMA_AND_SPACE +
+                month.getYear() +
                 closeTitleToken();
     }
 
@@ -58,9 +62,9 @@ public abstract class AbstractMonthPrinter {
     }
 
     private String header(){
-        String result = " ";
+        String result = "";
 
-        for (int day : weekLayout.header()){
+        for (DayOfWeek day : weekLayout.header()){
             result += weekLayout.isWeekend(day) ? openWeekendToken() : openWorkdayToken();
             result += formattedShortWeekdaysForTitle(day);
             result += closeDayToken();
@@ -72,7 +76,7 @@ public abstract class AbstractMonthPrinter {
     private String buildMonth(){
         String result = "";
 
-        for (Week week : month){
+        for (WeekCalendar week : month){
             result += openWeekToken();
             result += writeWeek(week);
             result += closeWeekToken();
@@ -81,16 +85,16 @@ public abstract class AbstractMonthPrinter {
         return result;
     }
 
-    private String writeWeek(Week week) {
+    private String writeWeek(WeekCalendar week) {
         String result = "";
 
-        for (Day day : week)
+        for (DayCalendar day : week)
             result += choiceOpenDayToken(day) + formattedDayOfMonth(day) + closeDayToken();
 
         return result;
     }
 
-    private String choiceOpenDayToken(Day day){
+    private String choiceOpenDayToken(DayCalendar day){
         if (!day.isInMonth(month)) return openOtherDayToken();
 
         if (isCurrentDay(day)) return openTodayToken();
@@ -100,19 +104,19 @@ public abstract class AbstractMonthPrinter {
         return openWorkdayToken();
     }
 
-    private boolean isCurrentDay(Day day){
-        Calendar calendar = Calendar.getInstance();
-        return (day.getDayOfMonth() == calendar.get(Calendar.DAY_OF_MONTH) &&
-                day.getMonthNumber() == calendar.get(Calendar.MONTH) &&
-                day.getYear() == calendar.get(Calendar.YEAR));
+    private boolean isCurrentDay(DayCalendar day){
+        LocalDate tempLocalDate = LocalDate.now();
+        return (day.getDayOfMonth() == tempLocalDate.getDayOfMonth() &&
+                day.getMonthNumber() == tempLocalDate.getMonth() &&
+                day.getYear() == tempLocalDate.getYear());
     }
 
-    private String formattedDayOfMonth(Day day){
+    private String formattedDayOfMonth(DayCalendar day){
         return String.format("%4d", day.getDayOfMonth());
     }
 
-    private String formattedShortWeekdaysForTitle(int day){
-        return String.format("%s ", DateFormatSymbols.getInstance().getShortWeekdays()[day]);
+    private String formattedShortWeekdaysForTitle(DayOfWeek day){
+        return String.format("%4s", day.getDisplayName(TextStyle.SHORT, Locale.ENGLISH));
     }
 
     protected String buildEnd(){
@@ -123,7 +127,7 @@ public abstract class AbstractMonthPrinter {
         this.weekLayout = weekLayout;
     }
 
-    public void setMonth(Month month) {
+    public void setMonth(MonthCalendar month) {
         this.month = month;
     }
 

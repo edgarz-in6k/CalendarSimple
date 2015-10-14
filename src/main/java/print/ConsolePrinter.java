@@ -1,14 +1,14 @@
 package print;
 
 import data.ColorASCII;
-import month.Month;
+import month.MonthCalendar;
 
 public class ConsolePrinter extends AbstractMonthPrinter {
 
     private static final String NEW_LINE = "\n";
     private static final String NONE = "";
 
-    public ConsolePrinter(Month month) {
+    public ConsolePrinter(MonthCalendar month) {
         super(month);
     }
 
